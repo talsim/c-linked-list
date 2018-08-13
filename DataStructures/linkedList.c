@@ -40,6 +40,18 @@ void print_list(List *self)
 	}
 }
 
+void free_list(List *self)
+{
+	Node *curr = self->start;
+	List *tmp;
+	while (curr != NULL)
+	{
+		tmp = curr;
+		curr = curr->next;
+		free(tmp);
+	}
+}
+
 static Node* create_node(int val)
 {
 	Node *new_node = (Node*)malloc(sizeof(Node));

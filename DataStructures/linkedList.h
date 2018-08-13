@@ -14,3 +14,4 @@ typedef struct List
 List* create_list();
 void add_last(List*, int);
 void print_list(List*);
+void free_list(List*);

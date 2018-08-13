@@ -7,5 +7,6 @@ int main()
 	add_last(lst, 0);
 	add_last(lst, 3);
 	print_list(lst);
+	free_list(lst);
 	return 0;
 }
