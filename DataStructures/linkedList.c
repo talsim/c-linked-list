@@ -52,6 +52,32 @@ void free_list(List *self)
 	}
 }
 
+int get_first(List *self)
+{
+	Node *first = self->start;
+	if (first != NULL)
+		return first->data;
+	else
+	{
+		printf("Error: The first node is empty\n");
+		exit(1);
+	}
+		
+}
+
+int get_last(List *self)
+{
+	Node *last = self->end;
+	if (last != NULL)
+		return last->data;
+	else
+	{
+		printf("Error: The last node is empty\n");
+		exit(1);
+	}
+	return 0;
+}
+
 static Node* create_node(int val)
 {
 	Node *new_node = (Node*)malloc(sizeof(Node));

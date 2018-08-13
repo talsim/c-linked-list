@@ -15,3 +15,5 @@ List* create_list();
 void add_last(List*, int);
 void print_list(List*);
 void free_list(List*);
+int get_first(List*);
+int get_last(List*);
