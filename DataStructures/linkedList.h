@@ -17,3 +17,5 @@ void print_list(List*);
 void free_list(List*);
 int get_first(List*);
 int get_last(List*);
+int is_empty(List*);
+List* reverse(List*);

@@ -6,7 +6,8 @@ int main()
 	add_last(lst, 5);
 	add_last(lst, 0);
 	add_last(lst, 3);
-	print_list(lst);
-	free_list(lst);
+	List *reversed = reverse(lst);
+	print_list(reversed);
+	free_list(reversed);
 	return 0;
 }

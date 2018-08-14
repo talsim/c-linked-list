@@ -78,6 +78,30 @@ int get_last(List *self)
 	return 0;
 }
 
+int is_empty(List *self)
+{
+	if (self->size == 0)
+		return 1;
+	else
+		return 0;
+}
+
+List* reverse(List *self)
+{
+	Node *prev = NULL;
+	Node *curr = self->start;
+	Node *next;
+	while (curr != NULL)
+	{
+		next = curr->next;
+		curr->next = prev;
+		prev = curr;
+		curr = next;	
+	}
+	self->start = prev;
+	return self;
+}
+
 static Node* create_node(int val)
 {
 	Node *new_node = (Node*)malloc(sizeof(Node));
