@@ -96,9 +96,17 @@ List* reverse(List *self)
 		next = curr->next;
 		curr->next = prev;
 		prev = curr;
-		curr = next;	
+		curr = next;
 	}
 	self->start = prev;
+	self->end = NULL;
+	return self;
+}
+
+List* clone(List *lst)
+{
+	List *self = create_list();
+	self = lst;
 	return self;
 }
 
