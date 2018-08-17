@@ -20,3 +20,10 @@ int get_last(List*);
 int is_empty(List*);
 List* reverse(List*);
 List* clone(List*);
+
+// add_first
+// add(index)
+// remove_first
+// remove_last
+// remove(index)
+// get(index)

@@ -62,7 +62,6 @@ int get_first(List *self)
 		printf("Error: The first node is empty\n");
 		exit(1);
 	}
-		
 }
 
 int get_last(List *self)
@@ -103,11 +102,40 @@ List* reverse(List *self)
 	return self;
 }
 
-List* clone(List *lst)
+List* clone(List *self)
 {
-	List *self = create_list();
-	self = lst;
-	return self;
+	//1. check if self is null
+	if (self == NULL)
+		return NULL;
+
+	//2. create new list
+	List *new_list = (List*)malloc(sizeof(List));
+	new_list->start = create_node(self->start->data);
+
+	//3. nodes for iteartion
+	Node *curr_node = self->start;
+	Node *next_new_node = new_list->start;
+	Node *prev_node = new_list->start;
+	while (curr_node->next != NULL)
+	{
+		// copy data
+		next_new_node = create_node(curr_node->next->data);
+		prev_node->next = next_new_node;
+
+		// go to next
+		if (curr_node->next != NULL)
+			prev_node = prev_node->next;
+
+		curr_node = curr_node->next;
+	}
+	//4. update new list -> end
+	new_list->end = self->end;
+
+	//5. update new list -> size
+	new_list->size = self->size;
+
+	//6. return new list
+	return new_list;
 }
 
 static Node* create_node(int val)
