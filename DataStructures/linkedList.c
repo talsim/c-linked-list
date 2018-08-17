@@ -32,18 +32,26 @@ void add_last(List *self, int val)
 
 void print_list(List *self)
 {
-	Node *curr = self->start;
-	while (curr != NULL)
+	printf("[");
+	if (!is_empty(self))
 	{
-		printf("%d\n", curr->data);
-		curr = curr->next;
+		Node *curr = self->start;
+		while (curr != NULL)
+		{
+			if (curr == self->end)
+				printf("%d", curr->data);
+			else
+				printf("%d, ", curr->data);
+			curr = curr->next;
+		}
 	}
+	printf("]\n");
 }
 
 void free_list(List *self)
 {
 	Node *curr = self->start;
-	List *tmp;
+	Node *tmp;
 	while (curr != NULL)
 	{
 		tmp = curr;
@@ -105,7 +113,7 @@ List* reverse(List *self)
 List* clone(List *self)
 {
 	//1. check if self is null
-	if (self == NULL)
+	if (is_empty(self))
 		return NULL;
 
 	//2. create new list
@@ -114,22 +122,21 @@ List* clone(List *self)
 
 	//3. nodes for iteartion
 	Node *curr_node = self->start;
-	Node *next_new_node = new_list->start;
-	Node *prev_node = new_list->start;
+	Node *prev_new_node = new_list->start;
+	Node *next_new_node = prev_new_node->next; // NULL
+
 	while (curr_node->next != NULL)
 	{
 		// copy data
 		next_new_node = create_node(curr_node->next->data);
-		prev_node->next = next_new_node;
+		prev_new_node->next = next_new_node;
 
 		// go to next
-		if (curr_node->next != NULL)
-			prev_node = prev_node->next;
-
+		prev_new_node = prev_new_node->next;
 		curr_node = curr_node->next;
 	}
 	//4. update new list -> end
-	new_list->end = self->end;
+	new_list->end = next_new_node;
 
 	//5. update new list -> size
 	new_list->size = self->size;
