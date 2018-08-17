@@ -8,7 +8,7 @@ int main()
 	add_last(lst, 3);
 	List *lst2 = clone(lst);
 	print_list(lst2);
-	free_list(lst);
 	free_list(lst2);
+	
 	return 0;
 }
