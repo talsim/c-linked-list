@@ -1,6 +1,7 @@
 #include "linkedList.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // Create a node to add to a list from a given value val
 static Node* create_node(int);
@@ -12,6 +13,22 @@ List* create_list()
 	ans->start = NULL;
 	ans->end = NULL;
 	return ans;
+}
+
+void add_first(List *self, int val)
+{
+	Node *add = create_node(val);
+	if (self->size == 0)
+	{
+		self->start = add;
+		self->end = add;
+	}
+	else
+	{
+		add->next = self->start;
+		self->start = add;
+	}
+	self->size++;
 }
 
 void add_last(List *self, int val)
@@ -82,15 +99,39 @@ int get_last(List *self)
 		printf("Error: The last node is empty\n");
 		exit(1);
 	}
-	return 0;
+}
+
+void remove_first(List *self) 
+{
+	if (is_empty == 1)
+		printf("the list is empty!\n");
+	Node *tmp = self->start;
+	if (tmp != NULL)
+	{
+		self->start = self->start->next;
+		free(tmp);
+	}
+	else
+		printf("Error: the list is empty!\n");
+	self->size--;
+}
+
+void remove_last(List *self)
+{
+	Node *curr = self->start;
+	while (curr == self->end)
+	{
+
+	}
+	self->size--;
 }
 
 int is_empty(List *self)
 {
-	if (self->size == 0)
-		return 1;
+	if (self->size == 0) // empty
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 List* reverse(List *self)
