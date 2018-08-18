@@ -6,7 +6,7 @@ int main()
 	add_first(lst, 2);
 	add_last(lst, 3);
 	add_last(lst, 4);
-	remove_first(lst);
+	remove_last(lst);
 	print_list(lst);
 	free_list(lst);
 	return 0;

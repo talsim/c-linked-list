@@ -101,7 +101,7 @@ int get_last(List *self)
 	}
 }
 
-void remove_first(List *self) 
+void remove_first(List *self)
 {
 	if (is_empty == 1)
 		printf("the list is empty!\n");
@@ -118,11 +118,12 @@ void remove_first(List *self)
 
 void remove_last(List *self)
 {
-	Node *curr = self->start;
-	while (curr == self->end)
-	{
-
-	}
+	Node* curr = NULL;
+	Node *tmp = self->end;
+	for (curr = self->start; curr->next != self->end; curr = curr->next); // find the node before end
+	self->end = curr;
+	self->end->next = NULL;
+	free(tmp);
 	self->size--;
 }
 
