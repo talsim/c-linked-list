@@ -47,7 +47,7 @@ void add_last(List *self, int val)
 	self->size++;
 }
 
-void print_list(List *self)
+void print_list(List *self) // prints until the next NULL
 {
 	printf("[");
 	if (!is_empty(self))
@@ -103,21 +103,21 @@ int get_last(List *self)
 
 void remove_first(List *self)
 {
-	if (is_empty == 1)
-		printf("the list is empty!\n");
+	if (is_empty == true)
+		printf("Error: the list is empty!\n");
 	Node *tmp = self->start;
 	if (tmp != NULL)
 	{
 		self->start = self->start->next;
 		free(tmp);
 	}
-	else
-		printf("Error: the list is empty!\n");
 	self->size--;
 }
 
 void remove_last(List *self)
 {
+	if (is_empty == true)
+		printf("Error: the list is empty!\n");
 	Node* curr = NULL;
 	Node *tmp = self->end;
 	for (curr = self->start; curr->next != self->end; curr = curr->next); // find the node before end
@@ -125,6 +125,62 @@ void remove_last(List *self)
 	self->end->next = NULL;
 	free(tmp);
 	self->size--;
+}
+
+void remove_by_value(List *self, int val) 
+{
+	//1. check if the list is empty
+	if (is_empty == true)
+	{
+		printf("Error: the list is empty!");
+		exit(1);
+	}
+	
+	//2. check if the value is in the list
+	if (contains(self, val) == false)
+	{
+		printf("Error: The value %d isn't in the list!", val);
+		exit(1);
+	}
+	
+	//2. go through the list and take care of all the cases 
+	Node *curr = self->start;
+	Node *remove = NULL;
+	while (curr != NULL)
+	{
+		if (self->start->data == val) // case its the first node
+		{
+			remove_first(self);
+		}
+		else if (self->start->data != val && self->end->data != val) // case its not end or start
+		{
+			// do something
+		}
+		else if (self->end->data == val) // case its the last node
+		{
+			remove_last(self);
+		}
+		else // case the program dont know what to do
+		{
+			printf("Unknown Error");
+			exit(1);
+		}
+	}
+	
+	//3. save the node and free it
+	
+}
+
+int contains(List *self, int val) // search for a val in the list
+{
+	Node *curr = self->start;
+	while (curr != NULL)
+	{
+		if (curr->data == val)
+			return true;
+		curr = curr->next;
+	}
+	return false;
 }
 
 int is_empty(List *self)
