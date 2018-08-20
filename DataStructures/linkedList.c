@@ -62,7 +62,7 @@ void print_list(List *self) // prints until the next NULL
 			curr = curr->next;
 		}
 	}
-	printf("]\n");
+	printf("]");
 }
 
 void free_list(List *self)
@@ -84,7 +84,7 @@ int get_first(List *self)
 		return first->data;
 	else
 	{
-		printf("Error: The first node is empty\n");
+		fprintf(stderr, "Error: The first node is empty");
 		exit(1);
 	}
 }
@@ -96,15 +96,15 @@ int get_last(List *self)
 		return last->data;
 	else
 	{
-		printf("Error: The last node is empty\n");
+		fprintf(stderr, "Error: The last node is empty");
 		exit(1);
 	}
 }
 
 void remove_first(List *self)
 {
-	if (is_empty == true)
-		printf("Error: the list is empty!\n");
+	if (is_empty(self) == true)
+		fprintf(stderr, "Error: the list is empty!");
 	Node *tmp = self->start;
 	if (tmp != NULL)
 	{
@@ -116,8 +116,8 @@ void remove_first(List *self)
 
 void remove_last(List *self)
 {
-	if (is_empty == true)
-		printf("Error: the list is empty!\n");
+	if (is_empty(self) == true)
+		fprintf(stderr, "Error: the list is empty!");
 	Node* curr = NULL;
 	Node *tmp = self->end;
 	for (curr = self->start; curr->next != self->end; curr = curr->next); // find the node before end
@@ -127,48 +127,69 @@ void remove_last(List *self)
 	self->size--;
 }
 
-void remove_by_value(List *self, int val) 
+void remove_by_value(List *self, int val)
 {
 	//1. check if the list is empty
-	if (is_empty == true)
-	{
-		printf("Error: the list is empty!");
-		exit(1);
-	}
-	
+	if (is_empty(self) == true)
+		fprintf(stderr, "Error: the list is empty!");
+
 	//2. check if the value is in the list
 	if (contains(self, val) == false)
 	{
-		printf("Error: The value %d isn't in the list!", val);
+		fprintf(stderr, "Error: The value %d isn't in the list!", val);
 		exit(1);
 	}
-	
-	//2. go through the list and take care of all the cases 
-	Node *curr = self->start;
-	Node *remove = NULL;
-	while (curr != NULL)
+
+	//3. go through the list and take care of all the cases 
+	if (self->start->data == val) // case its the first node
 	{
-		if (self->start->data == val) // case its the first node
+		remove_first(self);
+	}
+
+	else if (self->end->data == val) // case its the last node
+	{
+		remove_last(self);
+	}
+
+	else if (self->start->data != val && self->end->data != val) // case its not end or start
+	{
+		Node *remove = NULL;
+		for (Node *remove = self->start->next; remove->data == val; remove = remove->next);
+		if (remove middle) //middle
 		{
-			remove_first(self);
+			Node *bef_remove = NULL;
+			Node *tmp = remove;
+			for (bef_remove = self->start->next; bef_remove->next != remove; bef_remove = bef_remove->next);
+			bef_remove->next = remove->next;
+			free(tmp);
 		}
-		else if (self->start->data != val && self->end->data != val) // case its not end or start
+		else if (remove edges) // edges
 		{
-			// do something
+
 		}
-		else if (self->end->data == val) // case its the last node
+		else // program dont know what to do
 		{
-			remove_last(self);
-		}
-		else // case the program dont know what to do
-		{
-			printf("Unknown Error");
+			fprintf(stderr, "Unknown error");
 			exit(1);
 		}
 	}
-	
-	//3. save the node and free it
-	
+
+
+	//while (curr != NULL)
+	//{
+	//	else if (self->start->data != val && self->end->data != val)
+	//	{
+
+	//	}
+	//	else // case the program dont know what to do
+	//	{
+	//		fprintf(stderr, "Unknown Error");
+	//		exit(1);
+	//	}
+	//}
+
+	//4. save the node and free it
+
 }
 
 int contains(List *self, int val) // search for a val in the list
