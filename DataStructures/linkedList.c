@@ -5,6 +5,8 @@
 
 // Create a node to add to a list from a given value val
 static Node* create_node(int);
+// gets a value and return's its node
+static Node* return_node_by_value(int);
 
 List* create_list()
 {
@@ -62,7 +64,7 @@ void print_list(List *self) // prints until the next NULL
 			curr = curr->next;
 		}
 	}
-	printf("]");
+	printf("]\n");
 }
 
 void free_list(List *self)
@@ -84,7 +86,7 @@ int get_first(List *self)
 		return first->data;
 	else
 	{
-		fprintf(stderr, "Error: The first node is empty");
+		fprintf(stderr, "Error: The first node is empty!\n");
 		exit(1);
 	}
 }
@@ -96,7 +98,7 @@ int get_last(List *self)
 		return last->data;
 	else
 	{
-		fprintf(stderr, "Error: The last node is empty");
+		fprintf(stderr, "Error: The last node is empty!\n");
 		exit(1);
 	}
 }
@@ -104,7 +106,7 @@ int get_last(List *self)
 void remove_first(List *self)
 {
 	if (is_empty(self) == true)
-		fprintf(stderr, "Error: the list is empty!");
+		fprintf(stderr, "Error: the list is empty!\n");
 	Node *tmp = self->start;
 	if (tmp != NULL)
 	{
@@ -117,7 +119,7 @@ void remove_first(List *self)
 void remove_last(List *self)
 {
 	if (is_empty(self) == true)
-		fprintf(stderr, "Error: the list is empty!");
+		fprintf(stderr, "Error: the list is empty!\n");
 	Node* curr = NULL;
 	Node *tmp = self->end;
 	for (curr = self->start; curr->next != self->end; curr = curr->next); // find the node before end
@@ -129,18 +131,18 @@ void remove_last(List *self)
 
 void remove_by_value(List *self, int val)
 {
-	//1. check if the list is empty
+	// check if the list is empty
 	if (is_empty(self) == true)
-		fprintf(stderr, "Error: the list is empty!");
+		fprintf(stderr, "Error: the list is empty!\n");
 
-	//2. check if the value is in the list
-	if (contains(self, val) == false)
+	// check if the value is in the list
+	else if (contains(self, val) == false)
 	{
-		fprintf(stderr, "Error: The value %d isn't in the list!", val);
+		fprintf(stderr, "Error: The value %d isn't in the list!\n", val);
 		exit(1);
 	}
 
-	//3. go through the list and take care of all the cases 
+	// go through the list and take care of all the cases
 	if (self->start->data == val) // case its the first node
 	{
 		remove_first(self);
@@ -151,56 +153,23 @@ void remove_by_value(List *self, int val)
 		remove_last(self);
 	}
 
-	else if (self->start->data != val && self->end->data != val) // case its not end or start
+	else // case its not end or start
 	{
 		Node *remove = NULL;
-		for (Node *remove = self->start->next; remove->data == val; remove = remove->next);
-		if (remove middle) //middle
-		{
-			Node *bef_remove = NULL;
-			Node *tmp = remove;
-			for (bef_remove = self->start->next; bef_remove->next != remove; bef_remove = bef_remove->next);
-			bef_remove->next = remove->next;
-			free(tmp);
-		}
-		else if (remove edges) // edges
-		{
-
-		}
-		else // program dont know what to do
-		{
-			fprintf(stderr, "Unknown error");
-			exit(1);
-		}
+		remove = return_node_by_value(self, val);
+		Node *bef_remove = NULL;
+		for (bef_remove = self->start->next; bef_remove->next != remove; bef_remove = bef_remove->next); // puting bef_remove location 1 before remove
+		bef_remove->next = remove->next; // linking the node before remove to the node after remove
+		Node *tmp = remove;
+		free(tmp); //freeing remove
 	}
-
-
-	//while (curr != NULL)
-	//{
-	//	else if (self->start->data != val && self->end->data != val)
-	//	{
-
-	//	}
-	//	else // case the program dont know what to do
-	//	{
-	//		fprintf(stderr, "Unknown Error");
-	//		exit(1);
-	//	}
-	//}
-
-	//4. save the node and free it
-
 }
 
 int contains(List *self, int val) // search for a val in the list
 {
-	Node *curr = self->start;
-	while (curr != NULL)
-	{
-		if (curr->data == val)
-			return true;
-		curr = curr->next;
-	}
+	Node *foo = return_node_by_value(self, val);
+	if (foo != NULL)
+		return true;
 	return false;
 }
 
@@ -231,15 +200,15 @@ List* reverse(List *self)
 
 List* clone(List *self)
 {
-	//1. check if self is null
+	// check if self is null
 	if (is_empty(self))
 		return NULL;
 
-	//2. create new list
+	// create new list
 	List *new_list = (List*)malloc(sizeof(List));
 	new_list->start = create_node(self->start->data);
 
-	//3. nodes for iteartion
+	// nodes for iteartion
 	Node *curr_node = self->start;
 	Node *prev_new_node = new_list->start;
 	Node *next_new_node = prev_new_node->next; // NULL
@@ -254,14 +223,26 @@ List* clone(List *self)
 		prev_new_node = prev_new_node->next;
 		curr_node = curr_node->next;
 	}
-	//4. update new list -> end
+	// update new list -> end
 	new_list->end = next_new_node;
 
-	//5. update new list -> size
+	// update new list -> size
 	new_list->size = self->size;
 
-	//6. return new list
+	// return new list
 	return new_list;
+}
+
+static Node* return_node_by_value(List *self, int val)
+{
+	Node* curr = self->start;
+	while (curr != NULL)
+	{
+		if (curr->data == val)
+			return curr;
+		curr = curr->next;
+	}
+	return NULL;
 }
 
 static Node* create_node(int val)
