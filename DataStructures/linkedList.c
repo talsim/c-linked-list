@@ -105,14 +105,13 @@ int get_last(List *self)
 
 int get(List *self, int index)
 {
-	if (self == NULL)
+	if (is_empty(self) == true) // the list is empty
 		return NULL;
-	if (index > self->size)
+	if (index > self->size) // out of bounds
 	{
 		fprintf(stderr, "linked list out of bounds!\n");
 		return NULL;
 	}
-		
 	int count = 0;
 	Node *curr = self->start;
 	while (curr != NULL)
