@@ -103,6 +103,27 @@ int get_last(List *self)
 	}
 }
 
+int get(List *self, int index)
+{
+	if (self == NULL)
+		return NULL;
+	if (index > self->size)
+	{
+		fprintf(stderr, "linked list out of bounds!\n");
+		return NULL;
+	}
+		
+	int count = 0;
+	Node *curr = self->start;
+	while (curr != NULL)
+	{
+		if (count == index)
+			return curr->data;
+		count++;
+		curr = curr->next;
+	}
+}
+
 void remove_first(List *self)
 {
 	if (is_empty(self) == true)

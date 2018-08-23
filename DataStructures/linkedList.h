@@ -22,10 +22,10 @@ void free_list(List*);
 int contains(List*, int);
 int get_first(List*);
 int get_last(List*);
+int get(List*, int);
 int is_empty(List*);
 List* reverse(List*);
 List* clone(List*);
 
 // add(index)
-// remove(index)
 // get(index)
