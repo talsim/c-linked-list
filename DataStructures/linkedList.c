@@ -7,6 +7,12 @@
 static Node* create_node(int);
 // gets a value and return's its node
 static Node* get_node_by_value(List*, int);
+// gets an index and return's its node
+static Node* get_node_by_index(List*, int);
+// gets a node and return's the node before
+static Node* get_the_node_before(List*, Node*);
+// check's if the index is out of the list bounds
+static int is_index_out_of_bounds(List*, int);
 
 List* create_list()
 {
@@ -19,24 +25,21 @@ List* create_list()
 
 void add_first(List *self, int val)
 {
+	if (is_empty(self))
+	{
+		add_last(self, val);
+		return;
+	}
 	Node *add = create_node(val);
-	if (self->size == 0)
-	{
-		self->start = add;
-		self->end = add;
-	}
-	else
-	{
-		add->next = self->start;
-		self->start = add;
-	}
+	add->next = self->start;
+	self->start = add;
 	self->size++;
 }
 
 void add_last(List *self, int val)
 {
 	Node *to_add = create_node(val);
-	if (self->size == 0)
+	if (is_empty(self))
 	{
 		self->start = to_add;
 		self->end = to_add;
@@ -47,6 +50,34 @@ void add_last(List *self, int val)
 		self->end = to_add;
 	}
 	self->size++;
+}
+
+void add_before_index(List *self, int index, int val)
+{
+	Node *node = get_node_by_index(self, index);
+	if (is_index_out_of_bounds(self, index))
+	{
+		fprintf(stderr, "Error: linked list out of bounds!\n");
+		exit(1);
+	}
+	else if (self->start == node) // case start
+	{
+		add_first(self, val);
+	}
+	else if (self->end == node) // case end
+	{
+		Node *bef = get_the_node_before(self, node, self->start);
+		Node *new = create_node(val);
+		bef->next = new;
+		new->next = self->end;
+	}
+	else // case not end or start
+	{
+		Node *bef = get_the_node_before(self, node, self->start);
+		Node *new = create_node(val);
+		bef->next = new;
+		new->next = node;
+	}
 }
 
 void print_list(List *self) // prints until the next NULL
@@ -105,9 +136,9 @@ int get_last(List *self)
 
 int get(List *self, int index)
 {
-	if (index > self->size) // out of bounds
+	if (is_index_out_of_bounds(self, index))
 	{
-		fprintf(stderr, "linked list out of bounds!\n");
+		fprintf(stderr, "Error: linked list out of bounds!\n");
 		return NULL;
 	}
 	int count = 0;
@@ -123,7 +154,7 @@ int get(List *self, int index)
 
 void remove_first(List *self)
 {
-	if (is_empty(self) == true)
+	if (is_empty(self))
 		fprintf(stderr, "Error: the list is empty!\n");
 	Node *tmp = self->start;
 	if (tmp != NULL)
@@ -136,7 +167,7 @@ void remove_first(List *self)
 
 void remove_last(List *self)
 {
-	if (is_empty(self) == true)
+	if (is_empty(self))
 		fprintf(stderr, "Error: the list is empty!\n");
 	Node* curr = NULL;
 	Node *tmp = self->end;
@@ -149,19 +180,15 @@ void remove_last(List *self)
 
 void remove_by_value(List *self, int val)
 {
-	// check if the list is empty
-	if (is_empty(self) == true)
-		fprintf(stderr, "Error: the list is empty!\n");
-
 	// check if the value is in the list
-	else if (contains(self, val) == false)
+	if (!contains(self, val))
 	{
 		fprintf(stderr, "Error: The value %d isn't in the list!\n", val);
 		exit(1);
 	}
 
 	// go through the list and take care of all the cases
-	if (self->start->data == val) // case its the first node
+	else if (self->start->data == val) // case its the first node
 	{
 		remove_first(self);
 	}
@@ -174,21 +201,21 @@ void remove_by_value(List *self, int val)
 	else // case its not end or start
 	{
 		Node *remove = get_node_by_value(self, val);
-		Node *bef_remove = NULL;
-		for (bef_remove = self->start->next; bef_remove->next != remove; bef_remove = bef_remove->next); // puting bef_remove location 1 before remove
+		Node *bef_remove = get_the_node_before(self, remove, self->start->next);
 		bef_remove->next = remove->next; // linking the node before remove to the node after remove
 		free(remove); //freeing remove
 	}
+	self->size--;
 }
 
 int contains(List *self, int val) // search for a val in the list
 {
-	return get_node_by_value(self, val);
+	return get_node_by_value(self, val) != NULL;
 }
 
 int is_empty(List *self)
 {
-	return (self->size == 0);
+	return self->size == 0;
 }
 
 List* reverse(List *self)
@@ -245,7 +272,7 @@ List* clone(List *self)
 
 static Node* get_node_by_value(List *self, int val)
 {
-	Node* curr = self->start;
+	Node *curr = self->start;
 	while (curr != NULL)
 	{
 		if (curr->data == val)
@@ -253,6 +280,32 @@ static Node* get_node_by_value(List *self, int val)
 		curr = curr->next;
 	}
 	return NULL;
+}
+
+static Node* get_node_by_index(List *self, int index)
+{
+	Node *curr = self->start;
+	int count = 0;
+	while (curr != NULL)
+	{
+		if (count == index)
+			return curr;
+		count++;
+		curr = curr->next;
+	}
+	return NULL;
+}
+
+static Node* get_the_node_before(List *self, Node* node, Node *startPos)
+{
+	Node *bef_node = startPos;
+	for (; bef_node->next != node; bef_node = bef_node->next);
+	return bef_node;
+}
+
+static int is_index_out_of_bounds(List *self, int index)
+{
+	return index >= self->size;
 }
 
 static Node* create_node(int val)
