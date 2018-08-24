@@ -6,7 +6,7 @@
 // Create a node to add to a list from a given value val
 static Node* create_node(int);
 // gets a value and return's its node
-static Node* return_node_by_value(int);
+static Node* get_node_by_value(List*, int);
 
 List* create_list()
 {
@@ -70,7 +70,7 @@ void print_list(List *self) // prints until the next NULL
 void free_list(List *self)
 {
 	Node *curr = self->start;
-	Node *tmp;
+	Node *tmp = NULL;
 	while (curr != NULL)
 	{
 		tmp = curr;
@@ -105,8 +105,6 @@ int get_last(List *self)
 
 int get(List *self, int index)
 {
-	if (is_empty(self) == true) // the list is empty
-		return NULL;
 	if (index > self->size) // out of bounds
 	{
 		fprintf(stderr, "linked list out of bounds!\n");
@@ -175,30 +173,22 @@ void remove_by_value(List *self, int val)
 
 	else // case its not end or start
 	{
-		Node *remove = NULL;
-		remove = return_node_by_value(self, val);
+		Node *remove = get_node_by_value(self, val);
 		Node *bef_remove = NULL;
 		for (bef_remove = self->start->next; bef_remove->next != remove; bef_remove = bef_remove->next); // puting bef_remove location 1 before remove
 		bef_remove->next = remove->next; // linking the node before remove to the node after remove
-		Node *tmp = remove;
-		free(tmp); //freeing remove
+		free(remove); //freeing remove
 	}
 }
 
 int contains(List *self, int val) // search for a val in the list
 {
-	Node *foo = return_node_by_value(self, val);
-	if (foo != NULL)
-		return true;
-	return false;
+	return get_node_by_value(self, val);
 }
 
 int is_empty(List *self)
 {
-	if (self->size == 0) // empty
-		return true;
-	else
-		return false;
+	return (self->size == 0);
 }
 
 List* reverse(List *self)
@@ -253,7 +243,7 @@ List* clone(List *self)
 	return new_list;
 }
 
-static Node* return_node_by_value(List *self, int val)
+static Node* get_node_by_value(List *self, int val)
 {
 	Node* curr = self->start;
 	while (curr != NULL)
