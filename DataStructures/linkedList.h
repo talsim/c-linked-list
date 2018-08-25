@@ -15,6 +15,7 @@ List* create_list();
 void add_first(List *self, int val);
 void add_last(List *self, int val);
 void add_before_index(List *self, int index, int val);
+void add_after_index(List *self, int index, int val);
 void remove_first(List *self);
 void remove_last(List *self);
 void remove_by_value(List *self, int val);

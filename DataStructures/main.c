@@ -10,7 +10,7 @@ int main()
 	add_last(lst, 649);
 	add_last(lst, 6496);
 	add_last(lst, 642);
-	add_before_index(lst, 7, 5);
+	add_after_index(lst, 3, 5);
 	print_list(lst);
 	free_list(lst);
 	return 0;

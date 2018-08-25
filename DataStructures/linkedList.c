@@ -61,23 +61,49 @@ void add_before_index(List *self, int index, int val)
 		exit(1);
 	}
 	else if (self->start == node) // case start
-	{
 		add_first(self, val);
-	}
 	else if (self->end == node) // case end
 	{
 		Node *bef = get_the_node_before(self, node, self->start);
-		Node *new = create_node(val);
-		bef->next = new;
-		new->next = self->end;
+		Node *new_node = create_node(val);
+		bef->next = new_node;
+		new_node->next = self->end;
 	}
 	else // case not end or start
 	{
-		Node *bef = get_the_node_before(self, node, self->start);
-		Node *new = create_node(val);
-		bef->next = new;
-		new->next = node;
+		Node *bef = get_the_node_before(self, node, self->start->next);
+		Node *new_node = create_node(val);
+		bef->next = new_node;
+		new_node->next = node;
 	}
+	self->size++;
+}
+
+void add_after_index(List *self, int index, int val)
+{
+	Node *node = get_node_by_index(self, index);
+	if (is_index_out_of_bounds(self, index))
+	{
+		fprintf(stderr, "Error: linked list out of bounds!\n");
+		exit(1);
+	}
+	else if (self->start == node) // case start
+	{
+		Node *start_next_next = self->start->next->next;
+		Node *new_node = create_node(val);
+		self->start->next = new_node;
+		new_node->next = start_next_next;
+	}
+	else if (self->end == node) // case end
+		add_last(self, val);
+	else // case not end or start
+	{
+		Node *new_node = create_node(val);
+		Node *next_node = node->next;
+		node->next = new_node;
+		new_node->next = next_node;
+	}
+	self->size++;
 }
 
 void print_list(List *self) // prints until the next NULL
