@@ -1,2 +1,2 @@
-# Various Data-Structures
-Data structures implementation in C: Linked List, Stack, Queue
+# LinkedList
+Linked List implemented in C language
