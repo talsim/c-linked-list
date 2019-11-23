@@ -380,8 +380,4 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder
 .mfractor/
-/DataStructures/DataStructures.vcxproj.filters
-/DataStructures/DataStructures.vcxproj
-/DataStructures.sln
-/DataStructures/LinkedList/LinkedList.vcxproj.filters
-/DataStructures/LinkedList/LinkedList.vcxproj
+
