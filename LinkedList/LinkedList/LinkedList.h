@@ -36,7 +36,6 @@ int get_first(List* self);
 int get_last(List* self);
 
 /*Get value at given index.*/
-/*Returns 0 if succeeded, -1 elsewise.*/
 int get(List* self, int index);
 
 /*Remove first value.*/
