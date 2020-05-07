@@ -246,9 +246,11 @@ int is_empty(List *self)
 
 List* reverse(List *self)
 {
+	List* list = clone(self); // create a copy of list
+	Node* tmp = list->start; // save self->start to later set self->end to it
 	Node *prev = NULL;
-	Node *curr = self->start;
-	Node *next;
+	Node *curr = list->start;
+	Node* next = NULL;
 	while (curr != NULL)
 	{
 		next = curr->next;
@@ -256,9 +258,9 @@ List* reverse(List *self)
 		prev = curr;
 		curr = next;
 	}
-	self->start = prev;
-	self->end = NULL;
-	return self;
+	list->start = prev;
+	list->end = tmp;
+	return list;
 }
 
 List* clone(List *self)
