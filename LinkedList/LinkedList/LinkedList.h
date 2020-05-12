@@ -59,7 +59,7 @@ void free_list(List *self);
 /*Returns true if val contains in list, false elsewise.*/
 int contains(List *self, int val);
 
-/*Returns true is list is empty, false elsewise.*/
+/*Returns true if list is empty, false elsewise.*/
 int is_empty(List *self);
 
 /*Clone the list.*/
